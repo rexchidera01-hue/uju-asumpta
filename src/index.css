@@ -1,0 +1,38 @@
+/* 2. Import the three Tailwind layers (this is the new v4 way) */
+@import "tailwindcss";
+
+/* 3. NOW add your custom global styles (this is where the magic happens) */
+@layer base {
+  html {
+    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  }
+}
+
+/* Optional: make text extra crispy */
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadein {
+  animation: fadein 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
