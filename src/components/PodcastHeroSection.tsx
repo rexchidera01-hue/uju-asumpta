@@ -28,14 +28,23 @@ const HERO_IMAGES = [
 
 const QUOTES = [
   {
-    text: "Clarity begins when you are brave enough to pause.",
+    text: "The soul does not rush; it unfolds in perfect timing when met with trust.",
     author: "Uju Asumpta",
   },
-  { text: "Identity is remembered, not invented.", author: "Uju Asumpta" },
-  { text: "Alignment turns effort into grace.", author: "Uju Asumpta" },
-  { text: "Healing is how power learns to be gentle.", author: "Uju Asumpta" },
   {
-    text: "Legacy is the echo of a life lived on purpose.",
+    text: "To live authentically is to choose inner truth over outer approval, every single day.",
+    author: "Uju Asumpta",
+  },
+  {
+    text: "When you remember your oneness with Life, fear loses its authority over you.",
+    author: "Uju Asumpta",
+  },
+  {
+    text: "Purpose is revealed not in striving, but in stillness aligned with meaning.",
+    author: "Uju Asumpta",
+  },
+  {
+    text: "The highest success is a life lived in harmony with Love, Truth, and service.",
     author: "Uju Asumpta",
   },
 ];

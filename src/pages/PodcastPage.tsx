@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Play, ExternalLink, Share2 } from "lucide-react";
+import { Play, ExternalLink } from "lucide-react";
 import HeroSection from "../components/PodcastHeroSection";
 import Footer from "../components/Footer";
 
@@ -16,103 +16,16 @@ interface Video {
 
 const VIDEOS: Video[] = [
   {
-    id: "dQw4w9WgXcQ",
-    title: "Rick Astley - Never Gonna Give You Up (Official Video)",
-    thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    // Video replaced with the provided YouTube link
+    id: "ptM7VToUWIQ",
+    title: "Uju Asumpta — Quiet Beginnings",
+    thumbnail: "https://img.youtube.com/vi/ptM7VToUWIQ/maxresdefault.jpg",
+    youtubeUrl: "https://www.youtube.com/watch?v=ptM7VToUWIQ",
     description:
-      "Rick Astley's official music video for 'Never Gonna Give You Up'. A classic that never gets old!",
-    views: "1.2B",
-    uploadedAt: "Oct 25, 2009",
-    channel: "Rick Astley",
-  },
-  {
-    id: "9bZkp7q19f0",
-    title: "PSY - GANGNAM STYLE(강남스타일) M/V",
-    thumbnail: "https://img.youtube.com/vi/9bZkp7q19f0/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=9bZkp7q19f0",
-    description:
-      "PSY - GANGNAM STYLE(강남스타일) M/V — the phenomenon that became a worldwide sensation.",
-    views: "4.8B",
-    uploadedAt: "Jul 15, 2012",
-    channel: "officialpsy",
-  },
-  {
-    id: "jNQXAC9IVRw",
-    title: "Me at the zoo",
-    thumbnail: "https://img.youtube.com/vi/jNQXAC9IVRw/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
-    description:
-      "The first video ever uploaded to YouTube (jawed) — a short clip at the zoo.",
-    views: "300M",
-    uploadedAt: "Apr 23, 2005",
-    channel: "jawed",
-  },
-  {
-    id: "OPf0YbXqDm0",
-    title: "Justin Bieber - Baby ft. Ludacris",
-    thumbnail: "https://img.youtube.com/vi/OPf0YbXqDm0/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=OPf0YbXqDm0",
-    description:
-      "Baby by Justin Bieber featuring Ludacris — a hugely popular early-2010s pop hit.",
-    views: "3.2B",
-    uploadedAt: "Feb 19, 2010",
-    channel: "JustinBieberVEVO",
-  },
-  {
-    id: "kJQP7kiw9Fk",
-    title: "Luis Fonsi - Despacito ft. Daddy Yankee",
-    thumbnail: "https://img.youtube.com/vi/kJQP7kiw9Fk/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=kJQP7kiw9Fk",
-    description:
-      "Luis Fonsi - Despacito ft. Daddy Yankee — one of the most viewed videos on YouTube.",
-    views: "8.3B",
-    uploadedAt: "Jan 12, 2017",
-    channel: "Luis Fonsi",
-  },
-  {
-    id: "5NV6Rdv1a3I",
-    title: "Wiz Khalifa - See You Again ft. Charlie Puth",
-    thumbnail: "https://img.youtube.com/vi/5NV6Rdv1a3I/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
-    description:
-      "Wiz Khalifa - See You Again ft. Charlie Puth — emotional tribute song from Furious 7.",
-    views: "3.8B",
-    uploadedAt: "Mar 30, 2015",
-    channel: "Wiz Khalifa",
-  },
-  {
-    id: "9D-QcZUk-XI",
-    title: "The Weeknd - Blinding Lights",
-    thumbnail: "https://img.youtube.com/vi/9D-QcZUk-XI/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=9D-QcZUk-XI",
-    description:
-      "The Weeknd - Blinding Lights — hit single with a retro-80s vibe and cinematic video.",
-    views: "4.2B",
-    uploadedAt: "Jan 14, 2020",
-    channel: "The Weeknd",
-  },
-  {
-    id: "aqz-KE-bpKQ",
-    title: "Adele - Rolling in the Deep",
-    thumbnail: "https://img.youtube.com/vi/aqz-KE-bpKQ/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
-    description:
-      "Adele - Rolling in the Deep — powerful ballad from the album '21'.",
-    views: "2.9B",
-    uploadedAt: "Nov 29, 2010",
-    channel: "Adele",
-  },
-  {
-    id: "vHE7Bqr9Zks",
-    title: "Ava Max - Kings & Queens",
-    thumbnail: "https://img.youtube.com/vi/vHE7Bqr9Zks/maxresdefault.jpg",
-    youtubeUrl: "https://www.youtube.com/watch?v=vHE7Bqr9Zks",
-    description:
-      "Ava Max - Kings & Queens — upbeat pop anthem with a bold visual style.",
-    views: "1.1B",
-    uploadedAt: "Sep 4, 2019",
-    channel: "Ava Max",
+      "A short reflection from Uju Asumpta titled 'Quiet Beginnings' — pause, reflect and root your identity in God as you begin the year.",
+    views: "",
+    uploadedAt: "",
+    channel: "Uju Asumpta",
   },
 ];
 
@@ -130,6 +43,9 @@ export default function VideoPage() {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(100);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Transcript open state
+  const [transcriptOpen, setTranscriptOpen] = useState(false);
 
   // For custom progress bar interactions
   const [hoverPercent, setHoverPercent] = useState<number | null>(null);
@@ -354,6 +270,22 @@ export default function VideoPage() {
   const playedPercent = duration ? (currentTime / duration) * 100 : 0;
   const hoverPercentPct = hoverPercent != null ? hoverPercent * 100 : null;
 
+  // Transcript content (from your provided text)
+  const TRANSCRIPT = {
+    intro:
+      "Hello, beautiful souls! Welcome to ‘Quiet Beginnings’ with Uju Asumpta. Today, we pause to welcome the new year and the new light God is bringing into our lives.",
+    story:
+      "I remember standing by the window on the first day of a year long ago, feeling the crisp morning air and realizing that each day is a blank page. God gives us each year as a gift, a fresh chance to be who He created us to be.",
+    reflection:
+      "This year, I invite you to root your identity in God, not in achievements or expectations. Let your first step be towards knowing yourself in His light.",
+    prompt:
+      "Take a deep breath and ask: ‘Lord, show me who You made me to be this year.’ Sit in silence for a moment and listen.",
+    monetization:
+      "If you’d like to explore these reflections more deeply, our companion journal has prompts to help you capture your journey.",
+    closing:
+      "Thank you for pausing with me today. May your heart be anchored in peace, and your steps guided by love.",
+  };
+
   return (
     <>
       <HeroSection />
@@ -460,7 +392,7 @@ export default function VideoPage() {
                   </div>
                 </div>
 
-                {/* Title + profile picture + description (ONLY profile pic and description requested) */}
+                {/* Title + profile picture + transcript button (description removed as requested) */}
                 <div className="mt-4">
                   <h1 className="text-2xl font-bold mb-2">
                     {selectedVideo.title}
@@ -473,23 +405,79 @@ export default function VideoPage() {
                       className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                     />
                     <div>
-                      <p className="text-sm text-gray-700 mb-2">
-                        {selectedVideo.description}
-                      </p>
-                    </div>
-                  </div>
+                      {/* Transcript toggle (now replaces the description paragraph) */}
+                      <div className="mt-0">
+                        <button
+                          onClick={() => setTranscriptOpen((s) => !s)}
+                          aria-expanded={transcriptOpen}
+                          aria-controls="transcript-panel"
+                          className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm"
+                        >
+                          {transcriptOpen
+                            ? "Hide transcript"
+                            : "Show transcript"}
+                        </button>
 
-                  {/* Watch on YouTube link */}
-                  <div className="mt-4">
-                    <a
-                      href={selectedVideo.youtubeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-semibold text-white transition"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Watch on YouTube
-                    </a>
+                        <div
+                          id="transcript-panel"
+                          role="region"
+                          aria-hidden={!transcriptOpen}
+                          className="mt-3 overflow-hidden transition-all duration-300"
+                          style={{
+                            maxHeight: transcriptOpen ? 1000 : 0,
+                          }}
+                        >
+                          {transcriptOpen && (
+                            <div className="text-sm text-gray-800 space-y-3 p-3 bg-gray-50 rounded">
+                              <div>
+                                <strong>Intro:</strong>
+                                <p className="mt-1">{TRANSCRIPT.intro}</p>
+                              </div>
+
+                              <div>
+                                <strong>Story / Insight:</strong>
+                                <p className="mt-1">{TRANSCRIPT.story}</p>
+                              </div>
+
+                              <div>
+                                <strong>Reflection / Lesson:</strong>
+                                <p className="mt-1">{TRANSCRIPT.reflection}</p>
+                              </div>
+
+                              <div>
+                                <strong>Prompt / Meditation:</strong>
+                                <p className="mt-1">{TRANSCRIPT.prompt}</p>
+                              </div>
+
+                              <div>
+                                <strong>Soft Monetization:</strong>
+                                <p className="mt-1">
+                                  {TRANSCRIPT.monetization}
+                                </p>
+                              </div>
+
+                              <div>
+                                <strong>Closing:</strong>
+                                <p className="mt-1">{TRANSCRIPT.closing}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Watch on YouTube link (transcript appears above this) */}
+                      <div className="mt-4">
+                        <a
+                          href={selectedVideo.youtubeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-semibold text-white transition"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Watch on YouTube
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -527,7 +515,7 @@ export default function VideoPage() {
               </div>
             </div>
           ) : (
-            // Grid of all 9 videos
+            // Grid of videos (only one entry currently)
             <div>
               <div className="mb-12 text-center">
                 <h1 className="text-4xl font-bold mb-4 text-black">

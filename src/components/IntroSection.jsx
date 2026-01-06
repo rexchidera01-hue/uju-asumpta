@@ -1,55 +1,53 @@
-import React from "react";
-
-const heroImageUrl =
-  "https://images.unsplash.com/photo-1710188091078-e1d92210b9fc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cG9ydHJhaXQlMjBvZiUyMGElMjB3b21hbnxlbnwwfHwwfHx8MA%3D%3D";
+import heroImageUrl from "../assets/img--2.jpeg";
 
 export default function IntroSection() {
   return (
     <section className="bg-white text-black py-16 md:py-24">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-16 px-4 md:px-6">
-        {/* Left: heading, text + stacked CTAs */}
+        {/* Left: heading, text + single CTA */}
         <div className="md:col-span-7 lg:col-span-6">
-          <h1 className="mb-10 text-3xl md:text-4xl lg:text-5xl font-bold text-gray-600">
-            I'm Uju Asumpta, Founder of
-            <br />
-            The Curriculum of Life™
+          <h1 className="mb-10 text-3xl md:text-4xl lg:text-5xl font-bold text-black">
+            Meet Uju Asumpta
           </h1>
 
-          <p className="mb-4 text-lg md:text-xl leading-relaxed">
-            Here, you'll learn the part of life no school ever taught you — the
-            human curriculum.
-          </p>
+          <div className="space-y-4 text-lg md:text-xl leading-relaxed text-gray-800">
+            <p>
+              Uju Asumpta is a transformational teacher, author, and speaker,
+              and the founder of The Curriculum of Life™.
+            </p>
 
-          <p className="mb-6 text-lg md:text-xl font-medium leading-relaxed">
-            You are not here merely to survive.
-            <br />
-            You are here to live deeply, grow intentionally, and leave something
-            timeless behind.
-          </p>
+            <p>
+              She helps individuals, families, and organizations rediscover true
+              identity, heal inwardly, live with meaning, and build lives and
+              legacies that outlive them.
+            </p>
+
+            <p>
+              Through her work, Uju addresses the missing education of
+              humanity—the inner curriculum no school ever taught—covering
+              identity, emotional intelligence, spirituality, purpose, values,
+              and legacy leadership.
+            </p>
+
+            <p>
+              Her message is not only that of motivation; it is transformation.
+            </p>
+
+            <p>
+              She is the founder of Wellsage Ltd., a transformational education
+              company delivering courses, books, programs, and experiences
+              designed to help people live aligned, whole, and purpose-driven
+              lives.
+            </p>
+          </div>
 
           <div className="mt-6 flex flex-col items-start gap-4 w-full max-w-sm">
             <a
-              href="/curriculum"
-              aria-label="Discover The Curriculum of Life"
+              href="/about"
+              aria-label="About Uju Asumpta"
               className="w-full inline-block px-6 py-3 bg-white text-black border-[3px] border-black rounded-md font-medium transition-colors duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black text-center"
             >
-              Discover The Curriculum of Life™
-            </a>
-
-            <a
-              href="/wellsage"
-              aria-label="Explore Wellsage Programs"
-              className="w-full inline-block px-6 py-3 bg-white text-black border-[3px] border-black rounded-md font-medium transition-colors duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black text-center"
-            >
-              Explore Wellsage Programs
-            </a>
-
-            <a
-              href="/speaking"
-              aria-label="Book Uju for Speaking"
-              className="w-full inline-block px-6 py-3 bg-white text-black border-[3px] border-black rounded-md font-medium transition-colors duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black text-center"
-            >
-              Book Uju for Speaking
+              About Uju Asumpta
             </a>
           </div>
         </div>

@@ -1,7 +1,4 @@
-import React from "react";
-
-const heroImageUrl =
-  "https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D";
+import heroImageUrl from "../assets/img--3.jpeg";
 
 export default function MeetUju(): JSX.Element {
   return (
@@ -15,9 +12,11 @@ export default function MeetUju(): JSX.Element {
         <div className="md:col-span-7 lg:col-span-6">
           <h2
             id="meet-uju-heading"
-            className="mb-6 text-3xl md:text-4xl lg:text-5xl font-extrabold"
+            className="mb-6 text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900"
           >
-            Meet Uju Asumpta
+            I'm Uju Asumpta <br />
+            The Founder of <br />
+            The Curriculum of Life
           </h2>
 
           <p className="mb-4 text-lg md:text-xl text-gray-700 leading-relaxed">
@@ -35,16 +34,6 @@ export default function MeetUju(): JSX.Element {
           <p className="mb-6 text-lg md:text-xl font-semibold text-gray-800">
             That is what my work gives you.
           </p>
-
-          <div className="mt-6 flex flex-col items-start gap-4 w-full max-w-sm">
-            <a
-              href="/about"
-              className="w-full inline-block px-6 py-3 bg-white text-black border-[3px] border-black rounded-md font-medium transition-colors duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black text-center"
-              aria-label="About Uju"
-            >
-              About Uju Asumpta
-            </a>
-          </div>
         </div>
 
         {/* Right: image only — external URL, rounded corners, not cropped */}

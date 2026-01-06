@@ -28,14 +28,23 @@ const HERO_IMAGES = [
 
 const QUOTES = [
   {
-    text: "Clarity begins when you are brave enough to pause.",
+    text: "True power is not becoming more—it is remembering who you have always been.",
     author: "Uju Asumpta",
   },
-  { text: "Identity is remembered, not invented.", author: "Uju Asumpta" },
-  { text: "Alignment turns effort into grace.", author: "Uju Asumpta" },
-  { text: "Healing is how power learns to be gentle.", author: "Uju Asumpta" },
   {
-    text: "Legacy is the echo of a life lived on purpose.",
+    text: "When you align with Truth, life stops resisting you and begins to respond.",
+    author: "Uju Asumpta",
+  },
+  {
+    text: "Love is not something you fall into; it is something you awaken to within.",
+    author: "Uju Asumpta",
+  },
+  {
+    text: "Healing begins the moment you stop fighting your past and start listening to its wisdom.",
+    author: "Uju Asumpta",
+  },
+  {
+    text: "Legacy is not what you leave behind—it is who you awaken along the way.",
     author: "Uju Asumpta",
   },
 ];
@@ -48,6 +57,14 @@ export default function AboutHero() {
   const [imageIndex, setImageIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  // timers & last-tick refs
+  const imageTimerRef = useRef<number | null>(null);
+  const quoteTimerRef = useRef<number | null>(null);
+  const lastImageTickRef = useRef<number>(Date.now());
+  const lastQuoteTickRef = useRef<number>(Date.now());
+
+  const INTERVAL_MS = 5000;
+
   const navItems = [
     { name: "About", href: "/about" },
     { name: "The Curriculum of Life™", href: "/curriculum" },
@@ -57,13 +74,102 @@ export default function AboutHero() {
     { name: "Contact", href: "/contact" },
   ];
 
+  // helpers to start/clear timers
+  const clearImageTimer = () => {
+    if (imageTimerRef.current != null) {
+      window.clearInterval(imageTimerRef.current);
+      imageTimerRef.current = null;
+    }
+  };
+  const clearQuoteTimer = () => {
+    if (quoteTimerRef.current != null) {
+      window.clearInterval(quoteTimerRef.current);
+      quoteTimerRef.current = null;
+    }
+  };
+
+  const startImageTimer = () => {
+    clearImageTimer();
+    lastImageTickRef.current = Date.now();
+    imageTimerRef.current = window.setInterval(() => {
+      setImageIndex((c) => {
+        lastImageTickRef.current = Date.now();
+        return (c + 1) % HERO_IMAGES.length;
+      });
+    }, INTERVAL_MS);
+  };
+
+  const startQuoteTimer = () => {
+    clearQuoteTimer();
+    lastQuoteTickRef.current = Date.now();
+    quoteTimerRef.current = window.setInterval(() => {
+      setQuoteIndex((c) => {
+        lastQuoteTickRef.current = Date.now();
+        return (c + 1) % QUOTES.length;
+      });
+    }, INTERVAL_MS);
+  };
+
+  // Start timers on component mount
   useEffect(() => {
-    if (isPaused) return;
-    const id = setInterval(() => {
-      setQuoteIndex((c) => (c + 1) % QUOTES.length);
-      setImageIndex((c) => (c + 1) % HERO_IMAGES.length);
-    }, 5000);
-    return () => clearInterval(id);
+    startImageTimer();
+    startQuoteTimer();
+
+    return () => {
+      clearImageTimer();
+      clearQuoteTimer();
+    };
+  }, []);
+
+  // pause/resume on hover
+  useEffect(() => {
+    if (!isPaused) {
+      startImageTimer();
+      startQuoteTimer();
+    } else {
+      clearImageTimer();
+      clearQuoteTimer();
+    }
+
+    return () => {
+      clearImageTimer();
+      clearQuoteTimer();
+    };
+  }, [isPaused]);
+
+  // Sync when tab becomes visible again
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible" && !isPaused) {
+        const now = Date.now();
+
+        const elapsedImage = now - lastImageTickRef.current;
+        const stepsImage = Math.floor(elapsedImage / INTERVAL_MS);
+        if (stepsImage > 0) {
+          setImageIndex((c) => (c + stepsImage) % HERO_IMAGES.length);
+          lastImageTickRef.current = now;
+          startImageTimer();
+        }
+
+        const elapsedQuote = now - lastQuoteTickRef.current;
+        const stepsQuote = Math.floor(elapsedQuote / INTERVAL_MS);
+        if (stepsQuote > 0) {
+          setQuoteIndex((c) => (c + stepsQuote) % QUOTES.length);
+          lastQuoteTickRef.current = now;
+          startQuoteTimer();
+        }
+      }
+    };
+
+    const handleFocus = () => handleVisibility();
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", handleFocus);
+    };
   }, [isPaused]);
 
   return (
@@ -160,7 +266,7 @@ export default function AboutHero() {
           <motion.img
             key={HERO_IMAGES[imageIndex].src}
             src={HERO_IMAGES[imageIndex].src}
-            alt=""
+            alt={HERO_IMAGES[imageIndex].alt}
             className="absolute inset-0 w-full h-full object-cover"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
