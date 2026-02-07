@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { WhatsappLogo, Crown, User } from "@phosphor-icons/react";
+import PaymentModal from "./PaymentModal";
+import {
+  getCountryCurrency,
+  convertPrice,
+  formatPrice,
+  fetchRealTimeRates,
+} from "../../utils/currency-config";
 
 interface Plan {
   name: string;
@@ -56,47 +63,98 @@ const plans: Plan[] = [
   },
 ];
 
-const CURRENCY_RATES: { [key: string]: { code: string; rate: number } } = {
-  NG: { code: "₦", rate: 1500 }, // NGN
-  US: { code: "$", rate: 1 }, // USD
-  GB: { code: "£", rate: 0.79 }, // GBP
-  CA: { code: "C$", rate: 1.36 }, // CAD
-  AU: { code: "A$", rate: 1.54 }, // AUD
-  ZA: { code: "R", rate: 18.5 }, // ZAR
-  KE: { code: "KSh", rate: 130 }, // KES
-  GH: { code: "₵", rate: 12 }, // GHS
-  default: { code: "$", rate: 1 }, // USD as fallback
-};
-
 export default function TheLifeClassSection() {
-  const [currency, setCurrency] = useState(CURRENCY_RATES.default);
+  const [currency, setCurrency] = useState(getCountryCurrency(null));
+  const [countryCode, setCountryCode] = useState<string | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [isLoadingRates, setIsLoadingRates] = useState(true);
+  const [realTimeRates, setRealTimeRates] = useState<{
+    [key: string]: number;
+  } | null>(null);
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    planName: string;
+    priceUSD: number;
+  }>({ isOpen: false, planName: "", priceUSD: 0 });
 
+  // Fetch real-time exchange rates on component mount
+  useEffect(() => {
+    const loadRates = async () => {
+      setIsLoadingRates(true);
+      try {
+        const rates = await fetchRealTimeRates();
+        if (rates && Object.keys(rates).length > 0) {
+          setRealTimeRates(rates);
+        }
+      } catch (error) {
+        console.error("Failed to load real-time rates:", error);
+        // Will fall back to hardcoded rates
+      } finally {
+        setIsLoadingRates(false);
+      }
+    };
+
+    loadRates();
+  }, []);
+
+  // Detect user location
   useEffect(() => {
     const detectLocation = async () => {
+      setIsLoadingLocation(true);
       try {
-        const response = await fetch("https://ipapi.co/json/");
+        const response = await fetch("https://ipwho.is/", {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
-        const countryCode = data.country_code;
-        setCurrency(
-          CURRENCY_RATES[countryCode] || CURRENCY_RATES.default
-        );
+
+        if (data.success) {
+          const code = data.country_code;
+          setCountryCode(code);
+
+          // Get currency with real-time rates if available
+          const detectedCurrency = getCountryCurrency(
+            code,
+            realTimeRates || undefined,
+          );
+          setCurrency(detectedCurrency);
+        } else {
+          setCurrency(getCountryCurrency(null, realTimeRates || undefined));
+          setCountryCode(null);
+        }
       } catch (error) {
         console.error("Error detecting location:", error);
-        setCurrency(CURRENCY_RATES.default);
+        setCurrency(getCountryCurrency(null, realTimeRates || undefined));
+        setCountryCode(null);
+      } finally {
+        setIsLoadingLocation(false);
       }
     };
 
     detectLocation();
-  }, []);
+  }, [realTimeRates]);
 
-  const formatPrice = (priceUSD: number): string => {
-    const convertedPrice = priceUSD * currency.rate;
-    return `${currency.code}${Math.round(convertedPrice).toLocaleString()}`;
+  const handlePaymentClick = (plan: Plan) => {
+    if (countryCode === "NG") {
+      setModalState({
+        isOpen: true,
+        planName: plan.name,
+        priceUSD: plan.priceUSD,
+      });
+    } else {
+      window.open(plan.paymentLink, "_blank");
+    }
   };
 
-  const handlePaymentRedirect = (paymentLink: string) => {
-    window.open(paymentLink, "_blank");
+  const closeModal = () => {
+    setModalState({ isOpen: false, planName: "", priceUSD: 0 });
   };
+
+  const isLoading = isLoadingLocation || isLoadingRates;
 
   return (
     <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-blue-50">
@@ -111,10 +169,29 @@ export default function TheLifeClassSection() {
           </p>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center mb-6">
+            <p className="text-sm text-gray-600">
+              Loading pricing in your currency...
+            </p>
+            <div className="mt-2 flex justify-center">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+            </div>
+          </div>
+        )}
+
         {/* Plans Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {plans.map((plan) => {
             const Icon = plan.icon;
+            const convertedPrice = convertPrice(plan.priceUSD, currency.rate);
+            const displayPrice = formatPrice(
+              convertedPrice,
+              currency.symbol,
+              currency.code,
+            );
+
             return (
               <div
                 key={plan.name}
@@ -152,7 +229,7 @@ export default function TheLifeClassSection() {
                   {/* Price */}
                   <div className="text-center mb-6 sm:mb-8">
                     <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
-                      {formatPrice(plan.priceUSD)}
+                      {displayPrice}
                     </div>
                     {plan.priceUSD === 1 ? (
                       <p className="text-xs sm:text-sm text-gray-600 mt-2">
@@ -163,6 +240,9 @@ export default function TheLifeClassSection() {
                         per month
                       </p>
                     )}
+                    <p className="text-xs text-gray-500 mt-1">
+                      {currency.code}
+                    </p>
                   </div>
 
                   {/* Benefits */}
@@ -189,14 +269,17 @@ export default function TheLifeClassSection() {
 
                   {/* CTA Button */}
                   <button
-                    onClick={() => handlePaymentRedirect(plan.paymentLink)}
+                    onClick={() => handlePaymentClick(plan)}
+                    disabled={isLoading}
                     className={`w-full inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 ${
-                      plan.highlighted
-                        ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white hover:from-amber-600 hover:to-yellow-600 shadow-lg hover:shadow-xl"
-                        : "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg"
+                      isLoading
+                        ? "opacity-60 cursor-not-allowed"
+                        : plan.highlighted
+                          ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white hover:from-amber-600 hover:to-yellow-600 shadow-lg hover:shadow-xl"
+                          : "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg"
                     }`}
                   >
-                    Get Started
+                    {isLoading ? "Loading..." : "Get Started"}
                   </button>
                 </div>
               </div>
@@ -207,10 +290,26 @@ export default function TheLifeClassSection() {
         {/* Footer Note */}
         <div className="text-center mt-10 sm:mt-12 md:mt-16">
           <p className="text-xs sm:text-sm text-gray-600">
-            Secure payment powered by Paystack
+            {countryCode === "NG"
+              ? "Secure payment via bank transfer"
+              : `Secure payment in ${currency.code}`}
           </p>
+          {realTimeRates && (
+            <p className="text-xs text-gray-500 mt-1">
+              Exchange rates updated in real-time
+            </p>
+          )}
         </div>
       </div>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        planName={modalState.planName}
+        priceUSD={modalState.priceUSD}
+        realTimeRates={realTimeRates}
+      />
     </section>
   );
 }
