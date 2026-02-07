@@ -7,12 +7,9 @@ import videoBg from "../assets/vid-img.mp4";
 export default function HeroSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-
-  // Mobile menu state & focus ref
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const firstMobileLinkRef = useRef<HTMLAnchorElement | null>(null);
 
-  // Quotes carousel data (edit these as you like)
   const quotes: { text: string; author: string }[] = [
     {
       text: "The only way to do great work is to love what you do.",
@@ -38,7 +35,7 @@ export default function HeroSection() {
 
   const navItems = [
     { name: "About", href: "/about" },
-    { name: "The Curriculum of Life™", href: "/curriculum" },
+    { name: "Curriculum", href: "/curriculum" },
     { name: "Wellsage", href: "/wellsage" },
     { name: "Speaking", href: "/speaking" },
     { name: "Podcast", href: "/podcast" },
@@ -48,7 +45,6 @@ export default function HeroSection() {
   const [current, setCurrent] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
 
-  // Auto-advance every 5 seconds
   useEffect(() => {
     if (isPaused) return;
     const id = setInterval(() => {
@@ -57,7 +53,6 @@ export default function HeroSection() {
     return () => clearInterval(id);
   }, [isPaused, quotes.length]);
 
-  // Close mobile menu on Escape and manage body scroll when open
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setMobileMenuOpen(false);
@@ -65,7 +60,6 @@ export default function HeroSection() {
     if (mobileMenuOpen) {
       document.addEventListener("keydown", onKey);
       document.body.style.overflow = "hidden";
-      // Focus the first link for keyboard users
       setTimeout(() => firstMobileLinkRef.current?.focus(), 0);
     } else {
       document.removeEventListener("keydown", onKey);
@@ -76,6 +70,11 @@ export default function HeroSection() {
       document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
+
+  // Reset linkRefs array size to match navItems
+  useEffect(() => {
+    linkRefs.current = linkRefs.current.slice(0, navItems.length);
+  }, [navItems.length]);
 
   return (
     <>
@@ -92,7 +91,7 @@ export default function HeroSection() {
           <source src={videoBg} type="video/mp4" />
         </video>
 
-        {/* Fallback Image (kept behind the video) */}
+        {/* Fallback Image */}
         <div
           className="absolute inset-0 -z-10 bg-cover bg-center"
           style={{
@@ -110,11 +109,11 @@ export default function HeroSection() {
         </div>
 
         {/* NAVBAR */}
-        <nav className="absolute top-0 left-0 right-0 z-50 px-8 py-6 flex items-center justify-between">
-          {/* LOGO / NAME — CLICKS TO HOME ("/") */}
+        <nav className="absolute top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4 sm:py-6 flex items-center justify-between">
+          {/* LOGO */}
           <Link
             to="/"
-            className="text-4xl md:text-5xl lg:text-2xl font-bold text-black drop-shadow-2xl tracking-tight"
+            className="text-2xl sm:text-3xl md:text-5xl lg:text-2xl font-bold text-black drop-shadow-2xl tracking-tight"
           >
             <span style={{ fontFamily: "'Playwrite NO', Georgia, serif" }}>
               UJU
@@ -124,9 +123,8 @@ export default function HeroSection() {
             </span>
           </Link>
 
-          {/* Desktop nav (visible md+) */}
+          {/* Desktop nav */}
           <div className="hidden md:flex relative bg-white rounded-lg border-2 border-white shadow-xl flex items-center overflow-hidden">
-            {/* Sliding black pill */}
             <div
               className="absolute top-1 bottom-1 left-0 bg-black/85 rounded-lg transition-all duration-300 ease-out pointer-events-none"
               style={{
@@ -140,7 +138,7 @@ export default function HeroSection() {
                         .slice(0, hoveredIndex)
                         .reduce(
                           (acc, el) => acc + (el?.offsetWidth || 0),
-                          0
+                          0,
                         )}px)`
                     : "translateX(0)",
                 opacity: hoveredIndex !== null ? 1 : 0,
@@ -148,7 +146,6 @@ export default function HeroSection() {
             />
 
             {navItems.map((item, index) =>
-              // Use react-router Link for the About item so it performs client-side navigation
               item.href === "/about" ? (
                 <Link
                   key={item.name}
@@ -156,7 +153,7 @@ export default function HeroSection() {
                   ref={(el) =>
                     (linkRefs.current[index] = el as HTMLAnchorElement | null)
                   }
-                  className="relative px-6 md:px-6 py-3 text-black font-medium transition-colors duration-200 z-10 hover:text-white"
+                  className="relative px-4 md:px-6 py-3 text-black font-medium transition-colors duration-200 z-10 hover:text-white text-sm md:text-base"
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
@@ -167,26 +164,25 @@ export default function HeroSection() {
                   key={item.name}
                   href={item.href}
                   ref={(el) => (linkRefs.current[index] = el)}
-                  className="relative px-6 md:px-6 py-3 text-black font-medium transition-colors duration-200 z-10 hover:text-white"
+                  className="relative px-4 md:px-6 py-3 text-black font-medium transition-colors duration-200 z-10 hover:text-white text-sm md:text-base"
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
                   {item.name}
                 </a>
-              )
+              ),
             )}
           </div>
 
-          {/* Mobile hamburger (visible < md) using lucide-react */}
+          {/* Mobile hamburger */}
           <div className="md:hidden flex items-center">
             <button
               aria-controls="mobile-menu"
               aria-expanded={mobileMenuOpen}
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               onClick={() => setMobileMenuOpen((s) => !s)}
-              className="relative z-60 inline-flex items-center justify-center p-2 rounded-md bg-white/90 border border-gray-200 shadow-sm"
+              className="relative z-50 inline-flex items-center justify-center p-2 rounded-md bg-white/90 border border-gray-200 shadow-sm"
             >
-              {/* show Menu when closed, X when open */}
               {mobileMenuOpen ? (
                 <X size={20} strokeWidth={2} />
               ) : (
@@ -196,13 +192,13 @@ export default function HeroSection() {
           </div>
         </nav>
 
-        {/* Quotes carousel on the middle-right of the hero */}
+        {/* Quotes carousel - NOW VISIBLE ON ALL SCREEN SIZES */}
         <div
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 z-20 max-w-md w-full"
+          className="absolute left-4 right-4 sm:right-8 sm:left-auto top-1/2 transform -translate-y-1/2 z-20 w-auto max-w-xs sm:max-w-md"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div className="bg-black/50 backdrop-blur-md rounded-xl p-6 text-white shadow-lg">
+          <div className="bg-black/50 backdrop-blur-md rounded-xl p-3 sm:p-6 text-white shadow-lg">
             <AnimatePresence mode="wait">
               <motion.blockquote
                 key={current}
@@ -210,10 +206,10 @@ export default function HeroSection() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 30 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="text-lg sm:text-xl md:text-2xl font-medium leading-relaxed"
+                className="text-sm sm:text-lg md:text-xl lg:text-2xl font-medium leading-relaxed"
               >
-                “{quotes[current].text}”
-                <footer className="mt-4 text-sm md:text-base font-semibold text-amber-300">
+                "{quotes[current].text}"
+                <footer className="mt-2 sm:mt-4 text-xs sm:text-sm md:text-base font-semibold text-amber-300">
                   — {quotes[current].author}
                 </footer>
               </motion.blockquote>
@@ -221,7 +217,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Mobile menu overlay/drawer (no Get Started button) */}
+        {/* Mobile menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.aside
@@ -231,9 +227,8 @@ export default function HeroSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 60 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 z-60 md:hidden"
+              className="fixed inset-0 z-40 md:hidden"
             >
-              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.6 }}
@@ -243,23 +238,25 @@ export default function HeroSection() {
                 onClick={() => setMobileMenuOpen(false)}
               />
 
-              {/* Panel */}
               <motion.div
                 initial={{ x: 80 }}
                 animate={{ x: 0 }}
                 exit={{ x: 80 }}
                 transition={{ duration: 0.25 }}
-                className="relative bg-white w-full max-w-xs h-full shadow-xl p-6"
+                className="relative ml-auto bg-white w-full max-w-xs h-full shadow-xl p-4 sm:p-6 overflow-y-auto"
               >
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   aria-label="Close menu"
-                  className="absolute top-4 right-4 p-2 rounded-md text-gray-700"
+                  className="absolute top-4 right-4 p-2 rounded-md text-gray-700 hover:bg-gray-100"
                 >
                   <X size={18} strokeWidth={2} />
                 </button>
 
-                <nav className="mt-8 space-y-4" aria-label="Mobile primary">
+                <nav
+                  className="mt-8 space-y-3 sm:space-y-4"
+                  aria-label="Mobile primary"
+                >
                   {navItems.map((item, idx) =>
                     item.href === "/about" ? (
                       <Link
@@ -267,7 +264,7 @@ export default function HeroSection() {
                         to={item.href}
                         ref={idx === 0 ? firstMobileLinkRef : undefined}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block px-3 py-3 rounded-md text-base font-medium text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+                        className="block px-3 py-2 sm:py-3 rounded-md text-sm sm:text-base font-medium text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
                       >
                         {item.name}
                       </Link>
@@ -277,11 +274,11 @@ export default function HeroSection() {
                         href={item.href}
                         ref={idx === 0 ? firstMobileLinkRef : undefined}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block px-3 py-3 rounded-md text-base font-medium text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+                        className="block px-3 py-2 sm:py-3 rounded-md text-sm sm:text-base font-medium text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
                       >
                         {item.name}
                       </a>
-                    )
+                    ),
                   )}
                 </nav>
               </motion.div>
@@ -289,8 +286,6 @@ export default function HeroSection() {
           )}
         </AnimatePresence>
       </section>
-
-      {/* rest of the HeroSection content and subsequent sections remain unchanged */}
     </>
   );
 }

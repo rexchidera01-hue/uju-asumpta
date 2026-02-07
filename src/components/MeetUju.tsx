@@ -1,56 +1,90 @@
-import heroImageUrl from "../assets/img--3.jpeg";
+import React, { useState } from "react";
 
-export default function MeetUju(): JSX.Element {
+export default function MailingListSection(): JSX.Element {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<null | "success" | "error">(null);
+  const [loading, setLoading] = useState(false);
+
+  function validateEmail(value: string) {
+    return /\S+@\S+\.\S+/.test(value);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus(null);
+
+    if (!validateEmail(email)) {
+      setStatus("error");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await new Promise((r) => setTimeout(r, 900));
+      setStatus("success");
+      setEmail("");
+    } catch (err) {
+      setStatus("error");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <section
-      aria-labelledby="meet-uju-heading"
-      // keep the same z-index/stacking intent as before and retain the yellow background
-      className="relative z-30 text-gray-900 py-16 md:py-24 bg-yellow-200"
+      aria-labelledby="mailing-list-heading"
+      className="text-black py-12 sm:py-16 md:py-24 bg-gray-100"
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-16 px-4 md:px-6">
-        {/* Left: heading, text + stacked CTA(s) */}
-        <div className="md:col-span-7 lg:col-span-6">
-          <h2
-            id="meet-uju-heading"
-            className="mb-6 text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900"
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <h2
+          id="mailing-list-heading"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-extrabold text-gray-900"
+        >
+          Join the Mailing List
+        </h2>
+
+        <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-gray-800">
+          Receive weekly messages that ground, strengthen, and transform.
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6 sm:mt-8 flex flex-col items-center justify-center gap-2 sm:gap-3"
+        >
+          <label htmlFor="email" className="sr-only">
+            Email address
+          </label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="w-full sm:w-auto min-w-[200px] px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+            aria-label="Email address"
+            required
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full sm:w-auto inline-block px-6 sm:px-6 py-2.5 sm:py-3 bg-black text-white border-2 sm:border-[3px] border-black rounded-md font-semibold transition-colors duration-200 hover:bg-white hover:text-black disabled:opacity-60 text-sm sm:text-base"
+            aria-label="Subscribe"
           >
-            I'm Uju Asumpta <br />
-            The Founder of <br />
-            The Curriculum of Life
-          </h2>
+            {loading ? "Subscribing…" : "Subscribe"}
+          </button>
+        </form>
 
-          <p className="mb-4 text-lg md:text-xl text-gray-700 leading-relaxed">
-            You don’t need more pressure.
-            <br />
-            You don’t need another motivational speech.
-            <br />
-            You need{" "}
-            <span className="font-semibold text-gray-900">clarity</span> —{" "}
-            <span className="font-semibold text-gray-900">identity</span> —{" "}
-            <span className="font-semibold text-gray-900">meaning</span> —{" "}
-            <span className="font-semibold text-gray-900">healing</span>
+        {status === "success" && (
+          <p className="mt-4 text-green-700 font-medium text-sm sm:text-base">
+            Thanks — you're subscribed! Check your inbox for a confirmation.
           </p>
-
-          <p className="mb-6 text-lg md:text-xl font-semibold text-gray-800">
-            That is what my work gives you.
+        )}
+        {status === "error" && (
+          <p className="mt-4 text-red-600 font-medium text-sm sm:text-base">
+            Please enter a valid email address and try again.
           </p>
-        </div>
-
-        {/* Right: image only — external URL, rounded corners, not cropped */}
-        <div className="md:col-span-5 lg:col-span-6 md:order-last flex items-start justify-center">
-          {/* container defines visible height; image is anchored to the top so the bottom is hidden */}
-          <div
-            className="w-full shadow-lg overflow-hidden rounded-xl"
-            style={{ height: 700 /* set desired visible height */ }}
-          >
-            <img
-              src={heroImageUrl}
-              alt="Portrait of Uju"
-              className="w-full h-full object-cover object-top"
-              loading="lazy"
-            />
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );

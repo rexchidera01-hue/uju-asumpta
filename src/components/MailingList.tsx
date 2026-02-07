@@ -1,11 +1,5 @@
 import React, { useState } from "react";
 
-/**
- * Mailing List section with a simple subscription form.
- * - Validates basic email format and shows a success message.
- * - You can wire up the onSubmit handler to your mailing list provider.
- */
-
 export default function MailingListSection(): JSX.Element {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<null | "success" | "error">(null);
@@ -24,10 +18,8 @@ export default function MailingListSection(): JSX.Element {
       return;
     }
 
-    // Placeholder behaviour — replace with real mailing-list submission.
     setLoading(true);
     try {
-      // Example: await fetch("/api/subscribe", { method: "POST", body: JSON.stringify({ email }) });
       await new Promise((r) => setTimeout(r, 900));
       setStatus("success");
       setEmail("");
@@ -41,23 +33,23 @@ export default function MailingListSection(): JSX.Element {
   return (
     <section
       aria-labelledby="mailing-list-heading"
-      className="text-black py-16 md:py-24 bg-gray-100"
+      className="text-black py-12 sm:py-16 md:py-24 bg-gray-100"
     >
-      <div className="max-w-3xl mx-auto px-6 text-center">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <h2
           id="mailing-list-heading"
-          className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-extrabold text-gray-900"
         >
           Join the Mailing List
         </h2>
 
-        <p className="mt-4 text-lg md:text-xl text-gray-800">
+        <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl text-gray-800">
           Receive weekly messages that ground, strengthen, and transform.
         </p>
 
         <form
           onSubmit={handleSubmit}
-          className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3"
+          className="mt-6 sm:mt-8 flex flex-col items-center justify-center gap-2 sm:gap-3"
         >
           <label htmlFor="email" className="sr-only">
             Email address
@@ -68,7 +60,7 @@ export default function MailingListSection(): JSX.Element {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full sm:w-auto min-w-[240px] px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full sm:w-auto min-w-[200px] px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
             aria-label="Email address"
             required
           />
@@ -76,7 +68,7 @@ export default function MailingListSection(): JSX.Element {
           <button
             type="submit"
             disabled={loading}
-            className="inline-block px-6 py-3 bg-black text-white border-[3px] border-black rounded-md font-semibold transition-colors duration-200 hover:bg-white hover:text-black disabled:opacity-60"
+            className="w-full sm:w-auto inline-block px-6 sm:px-6 py-2.5 sm:py-3 bg-black text-white border-2 sm:border-[3px] border-black rounded-md font-semibold transition-colors duration-200 hover:bg-white hover:text-black disabled:opacity-60 text-sm sm:text-base"
             aria-label="Subscribe"
           >
             {loading ? "Subscribing…" : "Subscribe"}
@@ -84,12 +76,12 @@ export default function MailingListSection(): JSX.Element {
         </form>
 
         {status === "success" && (
-          <p className="mt-4 text-green-700 font-medium">
-            Thanks — you’re subscribed! Check your inbox for a confirmation.
+          <p className="mt-4 text-green-700 font-medium text-sm sm:text-base">
+            Thanks — you're subscribed! Check your inbox for a confirmation.
           </p>
         )}
         {status === "error" && (
-          <p className="mt-4 text-red-600 font-medium">
+          <p className="mt-4 text-red-600 font-medium text-sm sm:text-base">
             Please enter a valid email address and try again.
           </p>
         )}
