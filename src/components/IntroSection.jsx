@@ -4,8 +4,23 @@ export default function IntroSection() {
   return (
     <section className="bg-white text-black py-12 sm:py-16 md:py-24">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 items-center gap-8 sm:gap-12 md:gap-16 px-4 sm:px-6">
-        {/* Left: heading, text + single CTA */}
-        <div className="md:col-span-7 lg:col-span-6">
+        {/* Right: image - appears FIRST on mobile (order-1), SECOND on desktop (md:order-2) */}
+        <div className="md:col-span-5 lg:col-span-6 order-1 md:order-2 flex items-start justify-center">
+          <div
+            className="w-full shadow-lg overflow-hidden rounded-xl"
+            style={{ height: "300px", maxHeight: "400px" }}
+          >
+            <img
+              src={heroImageUrl}
+              alt="Portrait"
+              className="w-full h-full object-cover object-top"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        {/* Left: heading, text + single CTA - appears SECOND on mobile (order-2), FIRST on desktop (md:order-1) */}
+        <div className="md:col-span-7 lg:col-span-6 order-2 md:order-1">
           <h1 className="mb-6 sm:mb-10 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black">
             Meet Uju Asumpta
           </h1>
@@ -49,21 +64,6 @@ export default function IntroSection() {
             >
               About Uju Asumpta
             </a>
-          </div>
-        </div>
-
-        {/* Right: image */}
-        <div className="md:col-span-5 lg:col-span-6 md:order-last flex items-start justify-center">
-          <div
-            className="w-full shadow-lg overflow-hidden rounded-xl"
-            style={{ height: "400px", maxHeight: "500px" }}
-          >
-            <img
-              src={heroImageUrl}
-              alt="Portrait"
-              className="w-full h-full object-cover object-top"
-              loading="lazy"
-            />
           </div>
         </div>
       </div>

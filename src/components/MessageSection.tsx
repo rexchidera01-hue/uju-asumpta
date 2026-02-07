@@ -56,29 +56,29 @@ export default function MessageSection(): JSX.Element {
           It teaches what every human being must know to live well.
         </p>
 
-        {/* Cards grid */}
+        {/* Cards grid - 2 columns on mobile, 3 on tablet, 5 on desktop */}
         <ul
           role="list"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6"
         >
           {offers.map((o) => {
             const Icon = o.Icon;
             return (
               <li key={o.title}>
                 <article
-                  className="h-full bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-200 p-4 sm:p-6 flex flex-col items-center text-center"
+                  className="h-full bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-200 p-3 sm:p-4 md:p-6 flex flex-col items-center text-center"
                   aria-labelledby={`offer-${o.title}`}
                 >
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 mb-3 sm:mb-4 rounded-full flex items-center justify-center bg-amber-50">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mb-2 sm:mb-3 md:mb-4 rounded-full flex items-center justify-center bg-amber-50">
                     <Icon
-                      className="h-8 w-8 sm:h-10 sm:w-10 text-amber-400"
+                      className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 text-amber-400"
                       aria-hidden
                     />
                   </div>
 
                   <h3
                     id={`offer-${o.title}`}
-                    className="mt-2 text-base sm:text-lg font-semibold text-gray-800"
+                    className="mt-2 text-sm sm:text-base md:text-lg font-semibold text-gray-800"
                   >
                     {o.title}
                   </h3>
