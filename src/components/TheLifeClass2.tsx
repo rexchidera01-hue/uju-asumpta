@@ -1,315 +1,188 @@
-import React, { useEffect, useState } from "react";
-import { WhatsappLogo, Crown, User } from "@phosphor-icons/react";
-import PaymentModal from "./PaymentModal";
-import {
-  getCountryCurrency,
-  convertPrice,
-  formatPrice,
-  fetchRealTimeRates,
-} from "../../utils/currency-config";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
-interface Plan {
-  name: string;
-  priceUSD: number;
-  icon: React.ComponentType<any>;
-  description: string;
-  benefits: string[];
-  paymentLink: string;
-  highlighted?: boolean;
-}
+export default function ClarityCommunitySection() {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [statusType, setStatusType] = useState<"success" | "error" | "">("");
 
-const plans: Plan[] = [
-  {
-    name: "The Life Class",
-    priceUSD: 1,
-    icon: WhatsappLogo,
-    description: "Join our exclusive WhatsApp community",
-    benefits: [
-      "Daily life tips and motivational messages",
-      "Exclusive access to community discussions",
-      "Supportive network of like-minded individuals",
-      "Weekly wisdom and practical insights",
-    ],
-    paymentLink: "https://paystack.com/pay/thelifeclass",
-  },
-  {
-    name: "The Inner Circle",
-    priceUSD: 40,
-    icon: Crown,
-    description: "Premium access with deeper engagement",
-    benefits: [
-      "Everything in The Life Class",
-      "Monthly group coaching sessions",
-      "Direct access to Uju's guidance",
-      "Exclusive resource library",
-      "Priority community support",
-    ],
-    paymentLink: "https://paystack.com/pay/innercircle",
-    highlighted: true,
-  },
-  {
-    name: "One-on-One",
-    priceUSD: 150,
-    icon: User,
-    description: "Personal transformation with Uju",
-    benefits: [
-      "Everything in The Inner Circle",
-      "1-on-1 personalized coaching sessions",
-      "Customized transformation plan",
-      "Direct WhatsApp access to Uju",
-      "Lifetime support and guidance",
-    ],
-    paymentLink: "https://paystack.com/pay/oneononecaching",
-  },
-];
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-export default function TheLifeClassSection() {
-  const [currency, setCurrency] = useState(getCountryCurrency(null));
-  const [countryCode, setCountryCode] = useState<string | null>(null);
-  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
-  const [isLoadingRates, setIsLoadingRates] = useState(true);
-  const [realTimeRates, setRealTimeRates] = useState<{
-    [key: string]: number;
-  } | null>(null);
-  const [modalState, setModalState] = useState<{
-    isOpen: boolean;
-    planName: string;
-    priceUSD: number;
-  }>({ isOpen: false, planName: "", priceUSD: 0 });
+    if (!email.trim() || !email.includes("@")) {
+      setStatusMessage("Please enter a valid email address.");
+      setStatusType("error");
+      return;
+    }
 
-  // Fetch real-time exchange rates on component mount
-  useEffect(() => {
-    const loadRates = async () => {
-      setIsLoadingRates(true);
-      try {
-        const rates = await fetchRealTimeRates();
-        if (rates && Object.keys(rates).length > 0) {
-          setRealTimeRates(rates);
-        }
-      } catch (error) {
-        console.error("Failed to load real-time rates:", error);
-        // Will fall back to hardcoded rates
-      } finally {
-        setIsLoadingRates(false);
-      }
-    };
+    setIsSubmitting(true);
+    setStatusMessage("");
+    setStatusType("");
 
-    loadRates();
-  }, []);
+    // TODO: Replace this with your actual backend call (e.g., Convex mutation, Supabase insert, EmailJS, or form API)
+    // Example placeholder: simulate sending email with invite link
+    try {
+      // Simulate API call (2 seconds delay)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-  // Detect user location
-  useEffect(() => {
-    const detectLocation = async () => {
-      setIsLoadingLocation(true);
-      try {
-        const response = await fetch("https://ipwho.is/", {
-          method: "GET",
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data.success) {
-          const code = data.country_code;
-          setCountryCode(code);
-
-          // Get currency with real-time rates if available
-          const detectedCurrency = getCountryCurrency(
-            code,
-            realTimeRates || undefined,
-          );
-          setCurrency(detectedCurrency);
-        } else {
-          setCurrency(getCountryCurrency(null, realTimeRates || undefined));
-          setCountryCode(null);
-        }
-      } catch (error) {
-        console.error("Error detecting location:", error);
-        setCurrency(getCountryCurrency(null, realTimeRates || undefined));
-        setCountryCode(null);
-      } finally {
-        setIsLoadingLocation(false);
-      }
-    };
-
-    detectLocation();
-  }, [realTimeRates]);
-
-  const handlePaymentClick = (plan: Plan) => {
-    if (countryCode === "NG") {
-      setModalState({
-        isOpen: true,
-        planName: plan.name,
-        priceUSD: plan.priceUSD,
-      });
-    } else {
-      window.open(plan.paymentLink, "_blank");
+      // On success
+      setStatusMessage(
+        "Great! The WhatsApp invite link has been sent to your email.",
+      );
+      setStatusType("success");
+      setEmail(""); // clear input
+    } catch (err) {
+      setStatusMessage(
+        "Something went wrong. Please try again or contact support.",
+      );
+      setStatusType("error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const closeModal = () => {
-    setModalState({ isOpen: false, planName: "", priceUSD: 0 });
-  };
-
-  const isLoading = isLoadingLocation || isLoadingRates;
-
   return (
-    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-blue-50">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-10 sm:mb-14 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
-            Join Uju's Community
-          </h2>
-          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-            Choose the plan that best fits your transformation journey
-          </p>
-        </div>
-
-        {/* Loading State */}
-        {isLoading && (
-          <div className="text-center mb-6">
-            <p className="text-sm text-gray-600">
-              Loading pricing in your currency...
-            </p>
-            <div className="mt-2 flex justify-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-            </div>
-          </div>
-        )}
-
-        {/* Plans Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {plans.map((plan) => {
-            const Icon = plan.icon;
-            const convertedPrice = convertPrice(plan.priceUSD, currency.rate);
-            const displayPrice = formatPrice(
-              convertedPrice,
-              currency.symbol,
-              currency.code,
-            );
-
-            return (
-              <div
-                key={plan.name}
-                className={`relative rounded-xl shadow-lg transition-all duration-300 ${
-                  plan.highlighted
-                    ? "lg:scale-105 bg-gradient-to-br from-amber-50 to-yellow-50 ring-2 ring-amber-400"
-                    : "bg-white hover:shadow-xl"
-                }`}
-              >
-                {/* Ribbon for highlighted plan */}
-                {plan.highlighted && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-4 py-1 rounded-full text-xs sm:text-sm font-bold">
-                    Most Popular
-                  </div>
-                )}
-
-                <div className="p-6 sm:p-8 flex flex-col h-full">
-                  {/* Icon & Title */}
-                  <div className="text-center mb-4 sm:mb-6">
-                    <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-full mb-3 sm:mb-4">
-                      <Icon
-                        size={28}
-                        weight="bold"
-                        className="text-blue-600 sm:w-8 sm:h-8"
-                      />
-                    </div>
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                      {plan.name}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-600">
-                      {plan.description}
-                    </p>
-                  </div>
-
-                  {/* Price */}
-                  <div className="text-center mb-6 sm:mb-8">
-                    <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
-                      {displayPrice}
-                    </div>
-                    {plan.priceUSD === 1 ? (
-                      <p className="text-xs sm:text-sm text-gray-600 mt-2">
-                        and above
-                      </p>
-                    ) : (
-                      <p className="text-xs sm:text-sm text-gray-600 mt-2">
-                        per month
-                      </p>
-                    )}
-                    <p className="text-xs text-gray-500 mt-1">
-                      {currency.code}
-                    </p>
-                  </div>
-
-                  {/* Benefits */}
-                  <div className="flex-grow mb-6 sm:mb-8">
-                    <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">
-                      What you'll get:
-                    </h4>
-                    <ul className="space-y-2 sm:space-y-3">
-                      {plan.benefits.map((benefit) => (
-                        <li
-                          key={benefit}
-                          className="flex items-start gap-2 sm:gap-3"
-                        >
-                          <span className="flex-shrink-0 h-4 w-4 sm:h-5 sm:w-5 text-blue-600 font-bold mt-0.5">
-                            ✓
-                          </span>
-                          <span className="text-xs sm:text-sm text-gray-700">
-                            {benefit}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* CTA Button */}
-                  <button
-                    onClick={() => handlePaymentClick(plan)}
-                    disabled={isLoading}
-                    className={`w-full inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 ${
-                      isLoading
-                        ? "opacity-60 cursor-not-allowed"
-                        : plan.highlighted
-                          ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white hover:from-amber-600 hover:to-yellow-600 shadow-lg hover:shadow-xl"
-                          : "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg"
-                    }`}
-                  >
-                    {isLoading ? "Loading..." : "Get Started"}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Footer Note */}
-        <div className="text-center mt-10 sm:mt-12 md:mt-16">
-          <p className="text-xs sm:text-sm text-gray-600">
-            {countryCode === "NG"
-              ? "Secure payment via bank transfer"
-              : `Secure payment in ${currency.code}`}
-          </p>
-          {realTimeRates && (
-            <p className="text-xs text-gray-500 mt-1">
-              Exchange rates updated in real-time
-            </p>
-          )}
-        </div>
+    <section className="relative py-16 md:py-24 bg-gradient-to-b from-amber-50 via-white to-amber-50 overflow-hidden">
+      {/* Subtle decorative elements */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-amber-300 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-orange-300 rounded-full blur-3xl" />
       </div>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={modalState.isOpen}
-        onClose={closeModal}
-        planName={modalState.planName}
-        priceUSD={modalState.priceUSD}
-        realTimeRates={realTimeRates}
-      />
+      <div className="relative container mx-auto px-6 md:px-12 max-w-4xl text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-4xl md:text-5xl font-bold text-amber-900 mb-6"
+        >
+          Join the Clarity Sessions Community
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-lg md:text-xl text-gray-700 leading-relaxed mb-8 max-w-3xl mx-auto text-left"
+        >
+          A sacred space where seekers come together to gain clarity, deepen
+          their purpose, heal old wounds, and walk in alignment with God's
+          calling. Here we share insights, testimonies, guided reflections, and
+          encouragement, all rooted in faith and transformation.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-xl border border-amber-200 mb-10 text-left"
+        >
+          <p className="text-xl md:text-3xl font-bold text-amber-800 mb-2">
+            Special Lenten Offering
+          </p>
+          <p className="text-xl md:text-2xl font-semibold text-amber-800 mb-6">
+            Completely Free Access for the Next 40 Days
+          </p>
+
+          <p className="text-gray-700 mb-6">
+            During this holy season of reflection and renewal, we're opening the
+            community doors wide; no cost, no barriers. Join us for 40 days of
+            guided clarity sessions, daily inspirations, and fellowship as we
+            journey toward Easter with open hearts.
+          </p>
+
+          {/* Upcoming communities */}
+          <div className="mb-8">
+            <p className="text-lg font-semibold text-amber-900 mb-3">
+              Coming Soon: Deeper Spaces for Continued Growth
+            </p>
+            <ul className="space-y-4 text-gray-800">
+              <li className="flex items-start">
+                <span className="inline-block w-3 h-3 mt-2 mr-3 bg-amber-600 rounded-full flex-shrink-0"></span>
+                <div>
+                  <span className="font-medium text-amber-800">
+                    The Inner Circle
+                  </span>{" "}
+                  — An intimate, ongoing community for those who want consistent
+                  accountability, deeper mentorship, and advanced teachings on
+                  identity, purpose, and legacy.
+                </div>
+              </li>
+              <li className="flex items-start">
+                <span className="inline-block w-3 h-3 mt-2 mr-3 bg-amber-600 rounded-full flex-shrink-0"></span>
+                <div>
+                  <span className="font-medium text-amber-800">One-on-One</span>{" "}
+                  — Personalized sessions with Uju Asumpta for tailored
+                  guidance, breakthrough coaching, and direct support on your
+                  unique journey of healing and transformation.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+            <div className="mb-5">
+              <label
+                htmlFor="email"
+                className="block text-left text-gray-700 font-medium mb-2"
+              >
+                Enter your email to receive the WhatsApp invite link
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="yourname@example.com"
+                required
+                className="w-full px-5 py-4 rounded-lg border border-amber-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 bg-white text-gray-800 placeholder-gray-400 outline-none transition-all"
+              />
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              disabled={isSubmitting}
+              className={`w-full py-4 px-8 rounded-lg font-semibold text-lg shadow-md transition-all ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-amber-600 hover:bg-amber-700 text-white"
+              }`}
+            >
+              {isSubmitting ? "Sending..." : "Send Invite Link"}
+            </motion.button>
+
+            {statusMessage && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={`mt-4 text-sm font-medium ${
+                  statusType === "success" ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {statusMessage}
+              </motion.p>
+            )}
+          </form>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="text-gray-600 italic text-sm md:text-base"
+        >
+          Spaces are limited during this special season. Enter your email now
+          and step into clarity; the journey continues beyond these 40 days.
+        </motion.p>
+      </div>
     </section>
   );
 }

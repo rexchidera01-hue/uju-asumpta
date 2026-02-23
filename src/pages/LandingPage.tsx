@@ -13,11 +13,11 @@ const LandingPage = () => {
   return (
     <div>
       <HeroSection />
+      <TheLifeClassSection />
       <IntroSection />
       <MessageSection />
       <FeaturedOffer />
       <MeetUju />
-      <TheLifeClassSection />
       <WellsageSection />
       <PodcastsMediaSection />
       <MailingListSection />

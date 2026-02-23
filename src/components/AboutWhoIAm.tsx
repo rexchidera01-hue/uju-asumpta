@@ -1,8 +1,4 @@
 import React from "react";
-
-const heroImage =
-  "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80";
-
 export default function WhoIAmSection() {
   return (
     <section className="bg-white text-black py-16 md:py-24">
@@ -121,16 +117,6 @@ export default function WhoIAmSection() {
             walk alone. Welcome to my work. Welcome to The Curriculum of Life™.
           </p>
         </div>
-      </div>
-
-      {/* IMAGE — full viewport width */}
-      <div className="w-screen overflow-hidden mt-16">
-        <img
-          src={heroImage}
-          alt="Scenic landscape"
-          className="w-full h-[320px] md:h-[420px] lg:h-[520px] object-cover"
-          loading="lazy"
-        />
       </div>
     </section>
   );

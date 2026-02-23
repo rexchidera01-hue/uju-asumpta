@@ -4,7 +4,7 @@ import {
   getCountryCurrency,
   convertPrice,
   formatPrice,
-} from "../../utils/currency-config";
+} from "../utils/currency-config";
 
 interface PaymentModalProps {
   isOpen: boolean;
