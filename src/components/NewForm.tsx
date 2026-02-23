@@ -5,9 +5,10 @@ import toast from "react-hot-toast";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzbvbdp";
 
 // ← Replace with real Zoom details when ready
-const ZOOM_LINK = "https://us06web.zoom.us/j/12345678901?pwd=abc123xyz";
-const MEETING_ID = "123 456 7890";
-const PASSCODE = "abc123";
+const ZOOM_LINK =
+  "https://us06web.zoom.us/meeting/register/y79IIooeSiSllRYRlozboA";
+const MEETING_ID = "845 6680 0082";
+const PASSCODE = "340500";
 
 export default function WealthMasterclassSection(): JSX.Element {
   const [name, setName] = useState("");
@@ -47,27 +48,27 @@ export default function WealthMasterclassSection(): JSX.Element {
   };
 
   return (
-    <section className="bg-white py-16 md:py-28 px-5 sm:px-8 lg:px-12">
+    <section className="bg-white py-12 md:py-28 px-4 sm:px-6 lg:px-12">
       <div className="max-w-5xl mx-auto">
         {/* Top Badge – biggest on desktop, still prominent on mobile */}
-        <p className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-left">
+        <p className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 md:mb-8 text-left">
           <span className="text-green-600">FREE</span> Live Training on Zoom
         </p>
 
-        {/* Main Headline – serif, scales down nicely */}
+        {/* Main Headline – serif, nowrap on mobile, smaller to fit one line */}
         <h2
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-extrabold text-gray-900 leading-tight mb-6 text-left"
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-serif font-extrabold text-gray-900 leading-tight mb-4 md:mb-8 text-left whitespace-nowrap"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
           Wealth Awareness Masterclass
         </h2>
 
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-10 text-left">
-          Build Wealth With Structure — Not Hustle
+        <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-8 md:mb-12 text-left">
+          Build Wealth With Structure, Not Hustle
         </p>
 
         {/* Core Message */}
-        <div className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed space-y-5 mb-12 text-left max-w-4xl">
+        <div className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed space-y-4 md:space-y-6 mb-10 md:mb-16 text-left max-w-4xl">
           <p>
             Most people chase income. Few understand wealth. Even fewer build it
             intentionally.
@@ -83,8 +84,8 @@ export default function WealthMasterclassSection(): JSX.Element {
         </div>
 
         {/* Event Details */}
-        <div className="bg-gray-50 rounded-2xl shadow-lg p-6 sm:p-8 md:p-12 mb-12 border border-gray-100 text-left">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="bg-gray-50 rounded-xl md:rounded-2xl shadow-lg p-6 md:p-10 mb-10 md:mb-16 border border-gray-100 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
             <div>
               <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
                 Title
@@ -137,86 +138,86 @@ export default function WealthMasterclassSection(): JSX.Element {
         </div>
 
         {/* What You'll Learn */}
-        <div className="max-w-4xl mb-12 text-left">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+        <div className="max-w-4xl mb-10 md:mb-16 text-left">
+          <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-5 md:mb-8">
             What You Will Learn
           </h3>
-          <ul className="space-y-4 text-base sm:text-lg text-gray-700">
+          <ul className="space-y-3 md:space-y-5 text-sm sm:text-base md:text-lg text-gray-700">
             <li className="flex items-start gap-3">
-              <span className="text-amber-600 text-xl sm:text-2xl font-bold">
+              <span className="text-amber-600 text-lg sm:text-xl md:text-2xl font-bold">
                 •
               </span>
               The real difference between income and true wealth
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-amber-600 text-xl sm:text-2xl font-bold">
+              <span className="text-amber-600 text-lg sm:text-xl md:text-2xl font-bold">
                 •
               </span>
               Why most people remain trapped in financial cycles
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-amber-600 text-xl sm:text-2xl font-bold">
+              <span className="text-amber-600 text-lg sm:text-xl md:text-2xl font-bold">
                 •
               </span>
               The identity shift required to build lasting wealth
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-amber-600 text-xl sm:text-2xl font-bold">
+              <span className="text-amber-600 text-lg sm:text-xl md:text-2xl font-bold">
                 •
               </span>
               How to design systems that generate consistent income
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-amber-600 text-xl sm:text-2xl font-bold">
+              <span className="text-amber-600 text-lg sm:text-xl md:text-2xl font-bold">
                 •
               </span>
               The foundation of generational wealth architecture
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-amber-600 text-xl sm:text-2xl font-bold">
+              <span className="text-amber-600 text-lg sm:text-xl md:text-2xl font-bold">
                 •
               </span>
               The 5 pillars required to build wealth that outlives you
             </li>
           </ul>
-          <p className="mt-8 text-lg sm:text-xl italic font-medium text-gray-800">
+          <p className="mt-6 md:mt-8 text-base sm:text-lg md:text-xl italic font-medium text-gray-800">
             You will leave with clarity, structure, and a new financial lens.
           </p>
         </div>
 
         {/* Reserve Your Spot Form */}
-        <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-10 border border-gray-100">
-          <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 text-left">
+        <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-10 border border-gray-100">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-5 md:mb-6 text-left">
             Reserve Your Spot
           </h3>
-          <p className="text-base sm:text-lg text-gray-700 mb-8 text-left">
+          <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-6 md:mb-8 text-left">
             Enter your details to get the Zoom link and reminders.
           </p>
 
           {submitted ? (
-            <div className="text-left py-8">
-              <h4 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-600 mb-6">
+            <div className="text-left py-8 md:py-10">
+              <h4 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-green-600 mb-5 md:mb-6">
                 Thank you for signing in! 🎉
               </h4>
-              <p className="text-base sm:text-lg text-gray-700 mb-8">
+              <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-6 md:mb-8">
                 You're officially part of the Wealth Awareness Masterclass.
                 Here's your access:
               </p>
 
-              <div className="bg-gray-50 rounded-xl p-6 sm:p-8 border border-gray-200">
-                <p className="text-base sm:text-lg font-semibold text-gray-800 mb-4">
+              <div className="bg-gray-50 rounded-xl p-6 md:p-8 border border-gray-200">
+                <p className="text-base sm:text-lg font-semibold text-gray-800 mb-3 md:mb-4">
                   Zoom Link:
                 </p>
                 <a
                   href={ZOOM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-amber-700 hover:text-amber-900 font-medium break-all underline text-base sm:text-lg block mb-6"
+                  className="text-amber-700 hover:text-amber-900 font-medium break-all underline text-sm sm:text-base md:text-lg block mb-4 md:mb-6"
                 >
                   {ZOOM_LINK}
                 </a>
 
-                <div className="space-y-3 sm:space-y-4 text-base sm:text-lg text-gray-800">
+                <div className="space-y-2 md:space-y-4 text-sm sm:text-base md:text-lg text-gray-800">
                   <p>
                     <span className="font-bold">Meeting ID:</span> {MEETING_ID}
                   </p>
@@ -226,7 +227,7 @@ export default function WealthMasterclassSection(): JSX.Element {
                 </div>
               </div>
 
-              <p className="mt-8 text-base sm:text-lg italic text-gray-800">
+              <p className="mt-6 md:mt-8 text-sm sm:text-base md:text-lg italic text-gray-800">
                 Join 5–10 minutes early, bring your notebook, and get ready to
                 build wealth that outlives you 💛
               </p>
@@ -241,7 +242,7 @@ export default function WealthMasterclassSection(): JSX.Element {
                 placeholder="Your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 sm:px-5 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-base"
+                className="w-full px-4 sm:px-5 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm sm:text-base"
               />
               <input
                 type="email"
@@ -249,12 +250,12 @@ export default function WealthMasterclassSection(): JSX.Element {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 sm:px-5 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-base"
+                className="w-full px-4 sm:px-5 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm sm:text-base"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-3 sm:py-4 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition shadow-lg text-base sm:text-lg ${
+                className={`w-full py-3 sm:py-4 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition shadow-lg text-sm sm:text-base ${
                   loading
                     ? "opacity-70 cursor-not-allowed"
                     : "hover:scale-[1.02]"
